@@ -418,7 +418,12 @@ public class CratesPlus extends JavaPlugin implements Listener {
             if (crate == null)
                 continue;
             String path = "Crate Locations." + name;
-            List<String> locations = dataConfig.getStringList(path);
+            List<String> locations = dataConfig.getStringList( path );
+
+            getLogger().warning(
+                    "Get:" + path +
+                    " location:" + locations.toString()
+            );
 
             for (String location : locations) {
                 List<String> strings = Arrays.asList(location.split("\\|"));
@@ -434,14 +439,18 @@ public class CratesPlus extends JavaPlugin implements Listener {
                 }
                 Location locationObj = null;
                 try {
-                    locationObj = new Location(Bukkit.getWorld(strings.get(0)), Double.parseDouble(strings.get(1)), Double.parseDouble(strings.get(2)), Double.parseDouble(strings.get(3)));
+                    locationObj = new Location(
+                            Bukkit.getWorld( strings.get( 0 ) ),
+                            Double.parseDouble( strings.get( 1 ) ),
+                            Double.parseDouble( strings.get( 2 ) ),
+                            Double.parseDouble( strings.get( 3 ) )
+                    );
                 } catch (Exception ignored) {
+                    break;
                 }
-                if (locationObj == null) {
-                    continue;
-                }
+                getLogger().warning( "Location:" + locationObj.toString() );
                 Block block = locationObj.getBlock();
-                if (block == null || block.getType().equals(Material.AIR)) {
+                if ( block == null || block.getType().equals( Material.AIR ) ) {
                     getLogger().warning("No block found at " + location + " removing from data.yml");
                     crate.removeFromConfig(locationObj);
                     continue;
